@@ -85,17 +85,42 @@ export class OpenWeatherMapService {
     units: Units = this.defaultUnits,
     lang: Language = this.defaultLang
   ): Promise<CurrentWeatherResponse> {
-    const params = {
-      ...this.buildLocationParams(query),
-      units,
-      lang,
-    };
+    try {
+      const params = {
+        ...this.buildLocationParams(query),
+        units,
+        lang,
+      };
 
-    const response: AxiosResponse<CurrentWeatherResponse> = await this.client.get('/weather', {
-      params,
-    });
+      const response: AxiosResponse<CurrentWeatherResponse> = await this.client.get('/weather', {
+        params,
+      });
 
-    return response.data;
+      return response.data;
+    } catch (error: any) {
+      // 如果是城市未找到错误，且查询的是城市名，尝试通过地理编码获取坐标
+      if ((error.response?.status === 404 || error.message?.includes('404')) && query.city) {
+        try {
+          const geoResults = await this.geocoding(query.city, 1);
+
+          if (geoResults.length > 0) {
+            const firstResult = geoResults[0];
+            if (firstResult) {
+              const { lat, lon } = firstResult;
+
+              // 用坐标重新查询
+              const coordQuery: LocationQuery = { lat, lon };
+              return await this.getCurrentWeather(coordQuery, units, lang);
+            }
+          }
+        } catch (geoError) {
+          // 地理编码失败，继续抛出原始错误
+        }
+      }
+
+      // 抛出原始错误
+      throw error;
+    }
   }
 
   /**
@@ -106,18 +131,46 @@ export class OpenWeatherMapService {
     units: Units = this.defaultUnits,
     lang: Language = this.defaultLang
   ): Promise<ForecastResponse> {
-    const params = {
-      ...this.buildLocationParams(query),
-      units,
-      lang,
-      ...(query.cnt && { cnt: query.cnt }),
-    };
+    try {
+      const params = {
+        ...this.buildLocationParams(query),
+        units,
+        lang,
+        ...(query.cnt && { cnt: query.cnt }),
+      };
 
-    const response: AxiosResponse<ForecastResponse> = await this.client.get('/forecast', {
-      params,
-    });
+      const response: AxiosResponse<ForecastResponse> = await this.client.get('/forecast', {
+        params,
+      });
 
-    return response.data;
+      return response.data;
+    } catch (error: any) {
+      // 如果是城市未找到错误，且查询的是城市名，尝试通过地理编码获取坐标
+      if ((error.response?.status === 404 || error.message?.includes('404')) && query.city) {
+        try {
+          const geoResults = await this.geocoding(query.city, 1);
+
+          if (geoResults.length > 0) {
+            const firstResult = geoResults[0];
+            if (firstResult) {
+              const { lat, lon } = firstResult;
+
+              // 用坐标重新查询
+              const coordQuery: ForecastQuery = { lat, lon };
+              if (query.cnt) {
+                coordQuery.cnt = query.cnt;
+              }
+              return await this.getForecast(coordQuery, units, lang);
+            }
+          }
+        } catch (geoError) {
+          // 地理编码失败，继续抛出原始错误
+        }
+      }
+
+      // 抛出原始错误
+      throw error;
+    }
   }
 
   /**

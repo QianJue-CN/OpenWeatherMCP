@@ -1,7 +1,7 @@
 {
   "name": "openweather-mcp",
   "version": "1.0.0",
-  "description": "A Model Context Protocol (MCP) server for OpenWeatherMap API integration",
+  "description": "A comprehensive OpenWeatherMap API integration server based on Model Context Protocol (MCP), providing AI assistants with full weather data access capabilities including smart city name query support.",
   "main": "dist/index.js",
   "type": "module",
   "bin": {
@@ -24,9 +24,15 @@
     "api",
     "typescript",
     "ai",
-    "llm"
+    "llm",
+    "claude",
+    "geocoding",
+    "forecast",
+    "air-quality",
+    "smart-query",
+    "multilingual"
   ],
-  "author": "OpenWeather MCP Team",
+  "author": "QianJue-CN",
   "license": "MIT",
   "dependencies": {
     "@modelcontextprotocol/sdk": "^1.17.4",
@@ -46,15 +52,16 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/your-org/openweather-mcp.git"
+    "url": "https://github.com/QianJue-CN/OpenWeatherMCP.git"
   },
   "bugs": {
-    "url": "https://github.com/your-org/openweather-mcp/issues"
+    "url": "https://github.com/QianJue-CN/OpenWeatherMCP/issues"
   },
-  "homepage": "https://github.com/your-org/openweather-mcp#readme",
+  "homepage": "https://github.com/QianJue-CN/OpenWeatherMCP#readme",
   "files": [
     "dist/**/*",
     "README.md",
+    "README_zh.md",
     "LICENSE"
   ]
 }

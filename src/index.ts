@@ -6,6 +6,7 @@
 
 import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
 import { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio.js';
+import { z } from 'zod';
 import { OpenWeatherMapService } from './services/openweather.js';
 import { CurrentWeatherTool } from './tools/current-weather.js';
 import { ForecastTool } from './tools/forecast.js';
@@ -70,7 +71,15 @@ class OpenWeatherMCPServer {
       {
         title: '获取当前天气',
         description: CurrentWeatherTool.getDescription(),
-        inputSchema: {} as any,
+        inputSchema: {
+          city: z.string().optional().describe('城市名称'),
+          lat: z.number().optional().describe('纬度'),
+          lon: z.number().optional().describe('经度'),
+          zip: z.string().optional().describe('邮政编码'),
+          country: z.string().optional().describe('国家代码'),
+          units: z.string().optional().describe('单位制'),
+          lang: z.string().optional().describe('语言')
+        }
       },
       async (input: any) => {
         return await this.currentWeatherTool.execute(input) as any;
@@ -83,7 +92,16 @@ class OpenWeatherMCPServer {
       {
         title: '获取天气预报',
         description: ForecastTool.getDescription(),
-        inputSchema: {} as any,
+        inputSchema: {
+          city: z.string().optional().describe('城市名称'),
+          lat: z.number().optional().describe('纬度'),
+          lon: z.number().optional().describe('经度'),
+          zip: z.string().optional().describe('邮政编码'),
+          country: z.string().optional().describe('国家代码'),
+          cnt: z.number().optional().describe('预报时间点数量'),
+          units: z.string().optional().describe('单位制'),
+          lang: z.string().optional().describe('语言')
+        }
       },
       async (input: any) => {
         return await this.forecastTool.execute(input) as any;
@@ -96,7 +114,10 @@ class OpenWeatherMCPServer {
       {
         title: '获取空气质量',
         description: AirPollutionTool.getDescription(),
-        inputSchema: {} as any,
+        inputSchema: {
+          lat: z.number().describe('纬度'),
+          lon: z.number().describe('经度')
+        }
       },
       async (input: any) => {
         return await this.airPollutionTool.execute(input) as any;
@@ -109,7 +130,10 @@ class OpenWeatherMCPServer {
       {
         title: '获取空气质量预报',
         description: '获取指定坐标的空气质量预报数据',
-        inputSchema: {} as any,
+        inputSchema: {
+          lat: z.number().describe('纬度'),
+          lon: z.number().describe('经度')
+        }
       },
       async (input: any) => {
         return await this.airPollutionTool.getForecast(input.lat, input.lon) as any;
@@ -122,7 +146,12 @@ class OpenWeatherMCPServer {
       {
         title: '获取天气地图',
         description: WeatherMapTool.getDescription(),
-        inputSchema: {} as any,
+        inputSchema: {
+          layer: z.string().describe('地图图层类型'),
+          z: z.number().describe('缩放级别'),
+          x: z.number().describe('瓦片X坐标'),
+          y: z.number().describe('瓦片Y坐标')
+        }
       },
       async (input: any) => {
         return await this.weatherMapTool.execute(input) as any;
@@ -135,7 +164,12 @@ class OpenWeatherMCPServer {
       {
         title: '获取区域天气地图',
         description: '获取指定区域中心的天气地图',
-        inputSchema: {} as any,
+        inputSchema: {
+          layer: z.string().describe('地图图层类型'),
+          lat: z.number().describe('区域中心纬度'),
+          lon: z.number().describe('区域中心经度'),
+          zoom: z.number().optional().describe('缩放级别，默认为5')
+        }
       },
       async (input: any) => {
         return await this.weatherMapTool.getRegionMap(
@@ -153,7 +187,10 @@ class OpenWeatherMCPServer {
       {
         title: '获取天气警报',
         description: WeatherAlertsTool.getDescription(),
-        inputSchema: {} as any,
+        inputSchema: {
+          lat: z.number().describe('纬度'),
+          lon: z.number().describe('经度')
+        }
       },
       async (input: any) => {
         return await this.weatherAlertsTool.execute(input) as any;
@@ -166,7 +203,13 @@ class OpenWeatherMCPServer {
       {
         title: '获取历史天气',
         description: HistoricalWeatherTool.getDescription(),
-        inputSchema: {} as any,
+        inputSchema: {
+          lat: z.number().describe('纬度'),
+          lon: z.number().describe('经度'),
+          dt: z.number().describe('Unix时间戳'),
+          units: z.string().optional().describe('单位制'),
+          lang: z.string().optional().describe('语言')
+        }
       },
       async (input: any) => {
         return await this.historicalWeatherTool.execute(input) as any;
@@ -179,7 +222,10 @@ class OpenWeatherMCPServer {
       {
         title: '地理编码',
         description: '根据地名获取坐标信息',
-        inputSchema: {} as any,
+        inputSchema: {
+          q: z.string().describe('要查询的地名'),
+          limit: z.number().optional().describe('返回结果数量限制')
+        }
       },
       async (input: any) => {
         try {
@@ -225,7 +271,11 @@ class OpenWeatherMCPServer {
       {
         title: '反向地理编码',
         description: '根据坐标获取地名信息',
-        inputSchema: {} as any,
+        inputSchema: {
+          lat: z.number().describe('纬度'),
+          lon: z.number().describe('经度'),
+          limit: z.number().optional().describe('返回结果数量限制')
+        }
       },
       async (input: any) => {
         try {

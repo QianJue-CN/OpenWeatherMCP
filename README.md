@@ -1,65 +1,72 @@
 # OpenWeatherMap MCP Server
 
-一个基于 Model Context Protocol (MCP) 的 OpenWeatherMap API 集成服务器，为 AI 助手提供全面的天气数据访问能力。
+[English](README.md) | [中文](README_zh.md)
 
-## 🌟 功能特性
+A comprehensive OpenWeatherMap API integration server based on Model Context Protocol (MCP), providing AI assistants with full weather data access capabilities.
 
-### 核心天气功能
-- **🌡️ 当前天气查询** - 获取实时天气数据，包括温度、湿度、风速、气压等
-- **📅 天气预报** - 5天/3小时间隔的详细天气预报，含趋势分析
-- **🏭 空气质量监测** - 实时空气质量指数和污染物浓度数据
-- **🗺️ 天气地图** - 多图层天气地图瓦片（云层、降水、温度等）
-- **⚠️ 天气警报** - 政府发布的天气预警和安全建议
-- **📊 历史天气** - 历史天气数据查询和多日对比分析
+## 🌟 Key Features
 
-### 辅助功能
-- **🌍 地理编码** - 地名转坐标，支持模糊搜索
-- **📍 反向地理编码** - 坐标转地名，获取位置信息
-- **🔄 多单位支持** - 公制、英制、标准单位系统
-- **🌐 多语言支持** - 中文、英文等多种语言
+### Core Weather Functions
+- **🌡️ Current Weather Query** - Real-time weather data including temperature, humidity, wind speed, pressure, etc.
+- **📅 Weather Forecast** - 5-day/3-hour interval detailed weather forecasts with trend analysis
+- **🏭 Air Quality Monitoring** - Real-time air quality index and pollutant concentration data
+- **🗺️ Weather Maps** - Multi-layer weather map tiles (clouds, precipitation, temperature, etc.)
+- **⚠️ Weather Alerts** - Government-issued weather warnings and safety advisories
+- **📊 Historical Weather** - Historical weather data queries and multi-day comparison analysis
 
-## 📦 安装
+### Smart City Name Query
+- **🧠 Intelligent Fallback** - Automatically handles both Chinese and English city names
+- **🔄 Auto-Geocoding** - When direct city name query fails, automatically uses geocoding to get coordinates
+- **🌍 Universal Support** - Works with city names in any language through geocoding API
 
-### 前置要求
-- Node.js 18.0.0 或更高版本
-- OpenWeatherMap API 密钥
+### Additional Features
+- **🌍 Geocoding** - Place name to coordinates conversion with fuzzy search support
+- **📍 Reverse Geocoding** - Coordinates to place name conversion
+- **🔄 Multi-Unit Support** - Metric, Imperial, and Standard unit systems
+- **🌐 Multi-Language Support** - Chinese, English, and many other languages
 
-### 获取 API 密钥
-1. 访问 [OpenWeatherMap](https://openweathermap.org/api)
-2. 注册账户并获取免费 API 密钥
-3. 设置环境变量：
+## 📦 Installation
+
+### Prerequisites
+- Node.js 18.0.0 or higher
+- OpenWeatherMap API key
+
+### Get API Key
+1. Visit [OpenWeatherMap](https://openweathermap.org/api)
+2. Register an account and get a free API key
+3. Set environment variable:
    ```bash
    export OPENWEATHER_API_KEY="your_api_key_here"
    ```
 
-### 安装方式
+### Installation Methods
 
-#### 方式一：NPM 全局安装
+#### Method 1: NPM Global Installation
 ```bash
 npm install -g openweather-mcp
 ```
 
-#### 方式二：从源码构建
+#### Method 2: Build from Source
 ```bash
-git clone https://github.com/your-org/openweather-mcp.git
-cd openweather-mcp
+git clone https://github.com/QianJue-CN/OpenWeatherMCP.git
+cd OpenWeatherMCP
 npm install
 npm run build
 ```
 
-## 🚀 使用方法
+## 🚀 Usage
 
-### 作为 MCP 服务器运行
+### Run as MCP Server
 ```bash
-# 设置 API 密钥
+# Set API key
 export OPENWEATHER_API_KEY="your_api_key_here"
 
-# 启动服务器
+# Start server
 npx openweather-mcp
 ```
 
-### 在 Claude Desktop 中配置
-在 Claude Desktop 的配置文件中添加：
+### Configure in Claude Desktop
+Add to Claude Desktop configuration file:
 
 ```json
 {
@@ -75,23 +82,29 @@ npx openweather-mcp
 }
 ```
 
-### 在其他 MCP 客户端中使用
-任何支持 MCP 协议的客户端都可以连接到此服务器。
+### Use with Other MCP Clients
+Any MCP protocol-compatible client can connect to this server.
 
-## 🛠️ 可用工具
+## 🛠️ Available Tools
 
-### 1. 当前天气查询 (`get_current_weather`)
-获取指定位置的实时天气信息。
+### 1. Current Weather Query (`get_current_weather`)
+Get real-time weather information for specified location.
 
-**参数：**
-- `city` (可选): 城市名称，如 "北京" 或 "Beijing,CN"
-- `lat` (可选): 纬度 (-90 到 90)
-- `lon` (可选): 经度 (-180 到 180)
-- `zip` (可选): 邮政编码，如 "10001,US"
-- `units` (可选): 单位系统 (metric/imperial/standard)
-- `lang` (可选): 语言代码 (zh_cn/en/es/fr/de/ja/ko/ru)
+**Parameters:**
+- `city` (optional): City name, e.g., "Beijing" or "北京" or "Beijing,CN"
+- `lat` (optional): Latitude (-90 to 90)
+- `lon` (optional): Longitude (-180 to 180)
+- `zip` (optional): Postal code, e.g., "10001,US"
+- `units` (optional): Unit system (metric/imperial/standard)
+- `lang` (optional): Language code (zh_cn/en/es/fr/de/ja/ko/ru)
 
-**示例：**
+**Smart City Name Support:**
+- ✅ "北京" (Chinese) → Automatically works
+- ✅ "Beijing" (English) → Automatically works
+- ✅ "上海" (Chinese) → Automatically works
+- ✅ "Shanghai" (English) → Automatically works
+
+**Example:**
 ```json
 {
   "city": "北京",
@@ -100,14 +113,14 @@ npx openweather-mcp
 }
 ```
 
-### 2. 天气预报 (`get_weather_forecast`)
-获取5天天气预报数据。
+### 2. Weather Forecast (`get_weather_forecast`)
+Get 5-day weather forecast data.
 
-**参数：**
-- 位置参数同上
-- `cnt` (可选): 预报时间点数量 (最多40个)
+**Parameters:**
+- Location parameters same as above
+- `cnt` (optional): Number of forecast time points (max 40)
 
-**示例：**
+**Example:**
 ```json
 {
   "lat": 39.9042,
@@ -117,59 +130,59 @@ npx openweather-mcp
 }
 ```
 
-### 3. 空气质量 (`get_air_quality`)
-获取空气质量数据。
+### 3. Air Quality (`get_air_quality`)
+Get air quality data.
 
-**参数：**
-- `lat`: 纬度
-- `lon`: 经度
-- `start` (可选): 开始时间戳 (历史数据)
-- `end` (可选): 结束时间戳 (历史数据)
+**Parameters:**
+- `lat`: Latitude
+- `lon`: Longitude
+- `start` (optional): Start timestamp (for historical data)
+- `end` (optional): End timestamp (for historical data)
 
-### 4. 天气地图 (`get_weather_map`)
-获取天气地图瓦片。
+### 4. Weather Maps (`get_weather_map`)
+Get weather map tiles.
 
-**参数：**
-- `layer`: 图层类型 (clouds_new/precipitation_new/pressure_new/wind_new/temp_new)
-- `z`: 缩放级别 (0-10)
-- `x`: 瓦片 X 坐标
-- `y`: 瓦片 Y 坐标
+**Parameters:**
+- `layer`: Layer type (clouds_new/precipitation_new/pressure_new/wind_new/temp_new)
+- `z`: Zoom level (0-10)
+- `x`: Tile X coordinate
+- `y`: Tile Y coordinate
 
-### 5. 天气警报 (`get_weather_alerts`)
-获取天气预警信息。
+### 5. Weather Alerts (`get_weather_alerts`)
+Get weather warning information.
 
-**参数：**
-- `lat`: 纬度
-- `lon`: 经度
+**Parameters:**
+- `lat`: Latitude
+- `lon`: Longitude
 
-### 6. 历史天气 (`get_historical_weather`)
-查询历史天气数据。
+### 6. Historical Weather (`get_historical_weather`)
+Query historical weather data.
 
-**参数：**
-- `lat`: 纬度
-- `lon`: 经度
-- `dt`: 查询日期的 Unix 时间戳
-- `units`: 单位系统
-- `lang`: 语言代码
+**Parameters:**
+- `lat`: Latitude
+- `lon`: Longitude
+- `dt`: Unix timestamp for query date
+- `units`: Unit system
+- `lang`: Language code
 
-### 7. 地理编码 (`geocoding`)
-根据地名获取坐标。
+### 7. Geocoding (`geocoding`)
+Get coordinates from place names.
 
-**参数：**
-- `q`: 位置查询字符串
-- `limit`: 返回结果数量 (1-5)
+**Parameters:**
+- `q`: Location query string
+- `limit`: Number of results to return (1-5)
 
-### 8. 反向地理编码 (`reverse_geocoding`)
-根据坐标获取地名。
+### 8. Reverse Geocoding (`reverse_geocoding`)
+Get place names from coordinates.
 
-**参数：**
-- `lat`: 纬度
-- `lon`: 经度
-- `limit`: 返回结果数量 (1-5)
+**Parameters:**
+- `lat`: Latitude
+- `lon`: Longitude
+- `limit`: Number of results to return (1-5)
 
-## 📝 使用示例
+## 📝 Usage Examples
 
-### 查询北京当前天气
+### Query Beijing Current Weather
 ```json
 {
   "tool": "get_current_weather",
@@ -181,7 +194,7 @@ npx openweather-mcp
 }
 ```
 
-### 获取上海5天天气预报
+### Get Shanghai 5-Day Weather Forecast
 ```json
 {
   "tool": "get_weather_forecast",
@@ -193,7 +206,7 @@ npx openweather-mcp
 }
 ```
 
-### 查询空气质量
+### Query Air Quality
 ```json
 {
   "tool": "get_air_quality",
@@ -204,99 +217,113 @@ npx openweather-mcp
 }
 ```
 
-## 🔧 开发
+## 🌍 How Smart City Name Query Works
 
-### 项目结构
+1. **Direct Query**: First attempts to query weather using the provided city name directly
+2. **Auto Fallback**: If direct query fails (404 error), automatically triggers geocoding
+3. **Coordinate Conversion**: Converts city name to precise coordinates via geocoding API
+4. **Re-query**: Uses obtained coordinates to re-query weather data
+5. **Seamless Experience**: The entire process is transparent to users, no manual handling required
+
+This means you can use city names in any language:
+- Chinese: 北京、上海、广州、深圳
+- English: Beijing, Shanghai, Guangzhou, Shenzhen
+- Other languages: 東京、ソウル、Paris, London
+
+## 🔧 Development
+
+### Project Structure
 ```
 src/
-├── index.ts              # MCP 服务器入口
+├── index.ts              # MCP server entry point
 ├── types/
-│   ├── weather.ts        # 天气数据类型定义
-│   └── mcp.ts           # MCP 工具类型定义
+│   ├── weather.ts        # Weather data type definitions
+│   └── mcp.ts           # MCP tool type definitions
 ├── services/
-│   └── openweather.ts   # OpenWeatherMap API 服务
+│   └── openweather.ts   # OpenWeatherMap API service
 └── tools/
-    ├── current-weather.ts    # 当前天气工具
-    ├── forecast.ts          # 天气预报工具
-    ├── air-pollution.ts     # 空气质量工具
-    ├── weather-maps.ts      # 天气地图工具
-    ├── weather-alerts.ts    # 天气警报工具
-    └── historical-weather.ts # 历史天气工具
+    ├── current-weather.ts    # Current weather tool
+    ├── forecast.ts          # Weather forecast tool
+    ├── air-pollution.ts     # Air quality tool
+    ├── weather-maps.ts      # Weather maps tool
+    ├── weather-alerts.ts    # Weather alerts tool
+    └── historical-weather.ts # Historical weather tool
 ```
 
-### 构建和测试
+### Build and Test
 ```bash
-# 安装依赖
+# Install dependencies
 npm install
 
-# 构建项目
+# Build project
 npm run build
 
-# 开发模式（监听文件变化）
+# Development mode (watch file changes)
 npm run dev
 
-# 运行测试
+# Run tests
 npm test
 
-# 代码检查
+# Code linting
 npm run lint
 ```
 
-## 🌍 支持的位置格式
+## 🌍 Supported Location Formats
 
-### 城市名称
-- `"北京"` - 中文城市名
-- `"Beijing"` - 英文城市名
-- `"Beijing,CN"` - 城市名+国家代码
-- `"New York,US"` - 完整格式
+### City Names
+- `"北京"` - Chinese city name
+- `"Beijing"` - English city name
+- `"Beijing,CN"` - City name + country code
+- `"New York,US"` - Full format
 
-### 坐标
-- 纬度：-90 到 90
-- 经度：-180 到 180
-- 示例：`lat: 39.9042, lon: 116.4074`
+### Coordinates
+- Latitude: -90 to 90
+- Longitude: -180 to 180
+- Example: `lat: 39.9042, lon: 116.4074`
 
-### 邮政编码
-- `"10001,US"` - 美国邮编
-- `"100000,CN"` - 中国邮编
+### Postal Codes
+- `"10001,US"` - US postal code
+- `"100000,CN"` - Chinese postal code
 
-## 📊 数据格式
+## 📊 Data Formats
 
-### 温度单位
-- `metric`: 摄氏度 (°C)
-- `imperial`: 华氏度 (°F)  
-- `standard`: 开尔文 (K)
+### Temperature Units
+- `metric`: Celsius (°C)
+- `imperial`: Fahrenheit (°F)
+- `standard`: Kelvin (K)
 
-### 风速单位
-- `metric`: 米/秒 (m/s)
-- `imperial`: 英里/小时 (mph)
+### Wind Speed Units
+- `metric`: Meters per second (m/s)
+- `imperial`: Miles per hour (mph)
 
-### 语言支持
-- `zh_cn`: 简体中文
-- `en`: 英语
-- `es`: 西班牙语
-- `fr`: 法语
-- `de`: 德语
-- `ja`: 日语
-- `ko`: 韩语
-- `ru`: 俄语
+### Language Support
+- `zh_cn`: Simplified Chinese
+- `en`: English
+- `es`: Spanish
+- `fr`: French
+- `de`: German
+- `ja`: Japanese
+- `ko`: Korean
+- `ru`: Russian
 
-## ⚠️ 注意事项
+## ⚠️ Important Notes
 
-1. **API 限制**: 免费账户有调用次数限制，请合理使用
-2. **历史数据**: 历史天气数据需要付费订阅
-3. **One Call API**: 天气警报功能需要 One Call API 3.0 订阅
-4. **网络连接**: 确保服务器能够访问 OpenWeatherMap API
+1. **API Limits**: Free accounts have call limits, please use reasonably
+2. **Historical Data**: Historical weather data requires paid subscription
+3. **One Call API**: Weather alerts feature requires One Call API 3.0 subscription
+4. **Network Connection**: Ensure server can access OpenWeatherMap API
 
-## 🤝 贡献
+## 🤝 Contributing
 
-欢迎提交 Issue 和 Pull Request！
+Issues and Pull Requests are welcome!
 
-## 📄 许可证
+## 📄 License
 
 MIT License
 
-## 🔗 相关链接
+## 🔗 Related Links
 
-- [OpenWeatherMap API 文档](https://openweathermap.org/api)
+- [OpenWeatherMap API Documentation](https://openweathermap.org/api)
 - [Model Context Protocol](https://modelcontextprotocol.io/)
 - [Claude Desktop](https://claude.ai/desktop)
+- [GitHub Repository](https://github.com/QianJue-CN/OpenWeatherMCP)

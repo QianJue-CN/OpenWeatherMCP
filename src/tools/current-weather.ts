@@ -15,11 +15,21 @@ export class CurrentWeatherTool {
   async execute(input: CurrentWeatherInput): Promise<McpToolResponse> {
     try {
       const locationQuery: any = {};
-      if (input['city']) locationQuery.city = input['city'];
-      if (input['lat'] !== undefined) locationQuery.lat = input['lat'];
-      if (input['lon'] !== undefined) locationQuery.lon = input['lon'];
-      if (input['zip']) locationQuery.zip = input['zip'];
-      if (input['country']) locationQuery.country = input['country'];
+
+      // 处理参数
+      if (input.city) {
+        locationQuery.city = input.city;
+      }
+      if (input.lat !== undefined && input.lon !== undefined) {
+        locationQuery.lat = input.lat;
+        locationQuery.lon = input.lon;
+      }
+      if (input.zip) {
+        locationQuery.zip = input.zip;
+      }
+      if (input.country) {
+        locationQuery.country = input.country;
+      }
 
       const weatherData = await this.weatherService.getCurrentWeather(
         locationQuery,
